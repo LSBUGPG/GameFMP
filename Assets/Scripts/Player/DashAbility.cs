@@ -8,11 +8,28 @@ public class DashAbility : BaseAbility
     [SerializeField] private float dashForce;
     [SerializeField] private float maxDashDuration;
     private float dashTimer;
+   
+    private string dashAnimParameterName = "Dash";
+    private int dashParameterID;
+
+    protected override void Initialization()
+    {
+        base.Initialization();
+        dashParameterID = Animator.StringToHash(dashAnimParameterName);
+
+    }
 
 
     private void OnEnable()
     {
         dashActionRef.action.performed += TryToDash;
+    }
+
+    public override void ExitAbility()
+    {
+        linkedPhysics.EnableGravity();
+        //optional
+        linkedPhysics.ResetVelocity();
     }
 
     private void TryToDash(InputAction.CallbackContext value)
@@ -21,7 +38,15 @@ public class DashAbility : BaseAbility
         {
             return;
         }
+        if (linkedStateMachine.currentState == PlayerStates.State.Dash || linkedPhysics.wallDetected)
+        {
+            return;
+        }
+
+
         linkedStateMachine.ChangeState(PlayerStates.State.Dash);
+        linkedPhysics.DisableGravity();
+        linkedPhysics.ResetVelocity();
         if (player.facingRight)
         {
            linkedPhysics.rb.linearVelocityX = dashForce;
@@ -34,6 +59,34 @@ public class DashAbility : BaseAbility
 
         dashTimer = maxDashDuration;
 
+    }
+
+
+    public override void ProcessAbility()
+    {
+        dashTimer -= Time.deltaTime;
+       if (linkedPhysics.wallDetected)
+        {
+            dashTimer = -1;
+        }
+       if (dashTimer <= 0)
+        {
+            if (linkedPhysics.grounded)
+            {
+                linkedStateMachine.ChangeState(PlayerStates.State.Idle);
+             
+            }
+            else
+            {
+                linkedStateMachine.ChangeState(PlayerStates.State.Jump);
+            }
+        }
+    }
+
+
+    public override void UpdateAnimator()
+    {
+        linkedAnimator.SetBool(dashParameterID, linkedStateMachine.currentState == PlayerStates.State.Dash);
     }
  
 }
