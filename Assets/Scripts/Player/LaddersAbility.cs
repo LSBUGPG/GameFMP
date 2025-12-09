@@ -12,9 +12,13 @@ public class LaddersAbility : BaseAbility
     public bool canGoOnLadder;
 
 
+    private string ladderParameterName = "Ladder";
+    private int ladderParameterID;
+
     protected override void Initialization()
     {
         base.Initialization();
+        ladderParameterID = Animator.StringToHash(ladderParameterName);
         minimumLadderTime = setMinLadderTime;
     }
 
@@ -36,7 +40,8 @@ public class LaddersAbility : BaseAbility
         {
             return;
         }
-        if(linkedStateMachine.currentState==PlayerStates.State.Ladders || linkedStateMachine.currentState == PlayerStates.State.Dash || !canGoOnLadder)
+        linkedAnimator.enabled = true;
+        if (linkedStateMachine.currentState==PlayerStates.State.Ladders || linkedStateMachine.currentState == PlayerStates.State.Dash || !canGoOnLadder)
         {
             return;
         }
@@ -46,6 +51,7 @@ public class LaddersAbility : BaseAbility
         linkedPhysics.ResetVelocity();
         climb = true;
         minimumLadderTime = setMinLadderTime;
+        
     }
     private void StopClimb(InputAction.CallbackContext value)
     {
@@ -58,6 +64,14 @@ public class LaddersAbility : BaseAbility
             return;
         }
         linkedPhysics.ResetVelocity();
+        linkedAnimator.enabled = false;
+    }
+
+    public override void ExitAbility()
+    {
+        linkedPhysics.EnableGravity();
+        climb = false;
+        linkedAnimator.enabled = true;
     }
 
     public override void ProcessAbility()
@@ -65,6 +79,25 @@ public class LaddersAbility : BaseAbility
         if (climb)
         {
             minimumLadderTime -= Time.deltaTime;
+        }
+        //if (linkedInput.horizontalInput != 0)
+        //{
+        //    linkedStateMachine.ChangeState(PlayerStates.State.Jump);
+        //    //linkedPhysics.EnableGravity();
+        //    return;
+        //}
+        if (canGoOnLadder == false)
+        {
+            if (linkedPhysics.grounded == false)
+            {
+                linkedStateMachine.ChangeState(PlayerStates.State.Jump);
+                //linkedPhysics.EnableGravity();
+            }
+        }
+        if(linkedPhysics.grounded && minimumLadderTime <= 0)
+        {
+            linkedStateMachine.ChangeState(PlayerStates.State.Idle);
+            //linkedPhysics.EnableGravity();
         }
     }
 
@@ -74,5 +107,11 @@ public class LaddersAbility : BaseAbility
         {
             linkedPhysics.rb.linearVelocity = new Vector2(0, linkedInput.verticalInput * climbSpeed);
         }
+    }
+
+
+    public override void UpdateAnimator()
+    {
+        linkedAnimator.SetBool(ladderParameterID,linkedStateMachine.currentState == PlayerStates.State.Ladders);
     }
 }
