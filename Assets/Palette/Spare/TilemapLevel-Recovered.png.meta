@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: ce910e22c949bf74c9b2a0dabd656a35
+guid: e4dcf466cbee83f44b2ace0c87b29376
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -4401850743336396093
-    second: Tilemap(UpdatedVers_0
+      213: -7822168700782170016
+    second: TilemapLevel-Recovered_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,13 +100,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Tilemap(UpdatedVers_0
+      name: TilemapLevel-Recovered_0
       rect:
         serializedVersion: 2
-        x: 0
+        x: 16
         y: 0
-        width: 1920
-        height: 1080
+        width: 16
+        height: 16
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +115,52 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 3ca1529221c79e2c0800000000000000
-      internalID: -4401850743336396093
+      spriteID: 06033b0a203127390800000000000000
+      internalID: -7822168700782170016
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TilemapLevel-Recovered_1
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 0
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dcdc826b9b01f5b48b0efd7394ba4d7e
+      internalID: -1579237951
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TilemapLevel-Recovered_2
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 0
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e51c0ca1fde985642845391350adc0aa
+      internalID: -886169058
       vertices: []
       indices: 
       edges: []
@@ -125,7 +169,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: a05af8d8c5797dc48b1275ee50c1f8fb
     internalID: 0
     vertices: []
     indices: 
@@ -135,7 +179,9 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Tilemap(UpdatedVers_0: -4401850743336396093
+      TilemapLevel-Recovered_0: -7822168700782170016
+      TilemapLevel-Recovered_1: -1579237951
+      TilemapLevel-Recovered_2: -886169058
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
