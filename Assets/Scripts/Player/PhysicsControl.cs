@@ -48,6 +48,7 @@ public class PhysicsControl : MonoBehaviour
 
         Debug.DrawRay(leftGroundPoint.position, new Vector3(0, -groundRayDistance, 0), Color.red);
         Debug.DrawRay (rightGroundPoint.position, new Vector3(0,-groundRayDistance, 0), Color.red);
+        Debug.Log($"hit left {(bool)hitInfoLeft} hit right {(bool)hitInfoRight}");
         if (hitInfoLeft || hitInfoRight)
             return true;
 
