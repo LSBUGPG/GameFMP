@@ -11,10 +11,6 @@ public class StateMachine
 
     public void ChangeState(PlayerStates.State newState)
     {
-        if (newState == PlayerStates.State.Jump)
-        {
-            UnityEngine.Debug.Log("Jump");
-        }
         foreach(BaseAbility ability in arrayOfAbilities)
         {
             if(ability.thisAbilityState == newState)

@@ -1,6 +1,7 @@
 using Unity.VisualScripting.Dependencies.Sqlite;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.EnhancedTouch;
 
 public class LaddersAbility : BaseAbility
 {
@@ -9,7 +10,8 @@ public class LaddersAbility : BaseAbility
     [SerializeField] private float setMinLadderTime;
     private float minimumLadderTime;
     private bool climb;
-    public bool canGoOnLadder;
+    private bool tryingToClimb;
+    private bool canGoOnLadder;
 
 
     private string ladderParameterName = "Ladder";
@@ -20,6 +22,12 @@ public class LaddersAbility : BaseAbility
         base.Initialization();
         ladderParameterID = Animator.StringToHash(ladderParameterName);
         minimumLadderTime = setMinLadderTime;
+    }
+
+    public void TouchingLadder(bool touching)
+    {
+        canGoOnLadder = touching;
+        linkedPhysics.touchingLadder = touching;
     }
 
     private void OnEnable()
@@ -35,6 +43,12 @@ public class LaddersAbility : BaseAbility
     }
 
     private void TryToClimb(InputAction.CallbackContext value)
+    {
+        tryingToClimb = true;
+        TryToClimb();
+    }
+
+    private void TryToClimb()
     {
         if (!isPermitted)   
         {
@@ -55,6 +69,7 @@ public class LaddersAbility : BaseAbility
     }
     private void StopClimb(InputAction.CallbackContext value)
     {
+        tryingToClimb = false;
         if (!isPermitted)
         {
             return;
@@ -67,6 +82,10 @@ public class LaddersAbility : BaseAbility
         linkedAnimator.enabled = false;
     }
 
+    public override void EnterAbility()
+    {
+    }
+
     public override void ExitAbility()
     {
         linkedPhysics.EnableGravity();
@@ -74,20 +93,28 @@ public class LaddersAbility : BaseAbility
         linkedAnimator.enabled = true;
     }
 
+    private void Update()
+    {
+        if (tryingToClimb /* || linkedStateMachine.currentState == PlayerStates.State.Jump*/)
+        {
+            TryToClimb();
+        }
+    }
     public override void ProcessAbility()
     {
         if (climb)
         {
             minimumLadderTime -= Time.deltaTime;
         }
-        //if (linkedInput.horizontalInput != 0)
-        //{
-        //    linkedStateMachine.ChangeState(PlayerStates.State.Jump);
-        //    //linkedPhysics.EnableGravity();
-        //    return;
-        //}
+        if (linkedInput.horizontalInput != 0)
+        {
+            linkedStateMachine.ChangeState(PlayerStates.State.Jump);
+            linkedPhysics.EnableGravity();
+            return;
+        }
         if (canGoOnLadder == false)
         {
+            climb = false;
             if (linkedPhysics.grounded == false)
             {
                 linkedStateMachine.ChangeState(PlayerStates.State.Jump);

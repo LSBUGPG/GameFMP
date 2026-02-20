@@ -1,4 +1,7 @@
+using System;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Android;
 
 public class PhysicsControl : MonoBehaviour
 {
@@ -10,6 +13,7 @@ public class PhysicsControl : MonoBehaviour
     [SerializeField] private Transform rightGroundPoint;
     [SerializeField] private LayerMask whattoDetect;
     public bool grounded;
+    [NonSerialized] public bool touchingLadder;
     private RaycastHit2D hitInfoLeft;
     private RaycastHit2D hitInfoRight;
 
@@ -48,9 +52,13 @@ public class PhysicsControl : MonoBehaviour
 
         Debug.DrawRay(leftGroundPoint.position, new Vector3(0, -groundRayDistance, 0), Color.red);
         Debug.DrawRay (rightGroundPoint.position, new Vector3(0,-groundRayDistance, 0), Color.red);
-        Debug.Log($"hit left {(bool)hitInfoLeft} hit right {(bool)hitInfoRight}");
         if (hitInfoLeft || hitInfoRight)
             return true;
+
+        if (touchingLadder)
+        {
+            return true;
+        }
 
         return false;
     }
@@ -74,6 +82,14 @@ public class PhysicsControl : MonoBehaviour
     private void FixedUpdate()
     {
         grounded = CheckGround();
+        if (grounded)
+        {
+            DisableGravity();
+        }
+        else
+        {
+            EnableGravity();
+        }
         wallDetected = CheckWall();
     }
 }

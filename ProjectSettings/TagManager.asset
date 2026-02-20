@@ -57,5 +57,8 @@ TagManager:
   - name: Enemy
     uniqueID: 2960768015
     locked: 0
+  - name: Ladder
+    uniqueID: 1862608791
+    locked: 0
   m_RenderingLayers:
   - Default

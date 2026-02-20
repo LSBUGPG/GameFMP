@@ -17,7 +17,7 @@ public class Ladders : MonoBehaviour
         {
             if (laddersAbility.isPermitted)
             {
-                laddersAbility.canGoOnLadder = true;
+                laddersAbility.TouchingLadder(true);
             }
         }
     }
@@ -27,8 +27,9 @@ public class Ladders : MonoBehaviour
         {
             if( laddersAbility.isPermitted)
             {
-                laddersAbility.canGoOnLadder = false;    
+                laddersAbility.TouchingLadder(false);
             }
         }
+        laddersAbility = null;
     }
 }

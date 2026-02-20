@@ -17,7 +17,6 @@ public class IdleAbility : BaseAbility
 
     public override void ProcessAbility()
     {
-        Debug.Log("This is IDLE ability");
         if (linkedInput.horizontalInput != 0)
         {
             player.Flip();
