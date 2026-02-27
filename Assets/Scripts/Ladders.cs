@@ -4,32 +4,30 @@ public class Ladders : MonoBehaviour
 {
     private LaddersAbility laddersAbility;
 
+    private void SetTouchingLadder(bool touching)
+    {
+        if (laddersAbility != null)
+        {
+            if (laddersAbility.isPermitted)
+            {
+                laddersAbility.TouchingLadder(touching);
+            }
+        }
+    }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        laddersAbility= collision.GetComponent<LaddersAbility>();
-
+        laddersAbility = collision.GetComponent<LaddersAbility>();
+        SetTouchingLadder(true);
     }
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        if(laddersAbility!= null)
-        {
-            if (laddersAbility.isPermitted)
-            {
-                laddersAbility.TouchingLadder(true);
-            }
-        }
+        SetTouchingLadder(true);
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if(laddersAbility!= null)
-        {
-            if( laddersAbility.isPermitted)
-            {
-                laddersAbility.TouchingLadder(false);
-            }
-        }
+        SetTouchingLadder(false);
         laddersAbility = null;
     }
 }

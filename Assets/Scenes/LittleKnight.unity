@@ -44369,7 +44369,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.05234337, y: -0.07976198}
+  m_Offset: {x: -0.05234337, y: -0.06362295}
   m_SpriteTilingProperty:
     border: {x: 0.0625, y: 0.0625, z: 0.0625, w: 0.0625}
     pivot: {x: 0.5, y: 0.5}
@@ -44379,7 +44379,7 @@ BoxCollider2D:
     drawMode: 2
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.72781754, y: 8.058843}
+  m_Size: {x: 0.72781754, y: 8.091121}
   m_EdgeRadius: 0
 --- !u!212 &239451920
 SpriteRenderer:
@@ -44789,12 +44789,12 @@ GameObject:
   - component: {fileID: 268253532}
   - component: {fileID: 268253533}
   - component: {fileID: 268253536}
+  - component: {fileID: 268253541}
   - component: {fileID: 268253534}
   - component: {fileID: 268253535}
   - component: {fileID: 268253537}
   - component: {fileID: 268253539}
   - component: {fileID: 268253540}
-  - component: {fileID: 268253541}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -45095,7 +45095,7 @@ MonoBehaviour:
   jumpActionRef: {fileID: 8356014415723050403, guid: cd7f92a52eff9a44aa4ae37e22733093, type: 3}
   jumpForce: 40
   airSpeed: 5
-  mininumAirTime: 0
+  mininumAirTime: 0.1
 --- !u!114 &268253535
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -45274,8 +45274,6 @@ MonoBehaviour:
   isPermitted: 1
   ladderActionRef: {fileID: 5498859251445927485, guid: cd7f92a52eff9a44aa4ae37e22733093, type: 3}
   climbSpeed: 2
-  setMinLadderTime: 0.2
-  canGoOnLadder: 0
 --- !u!1 &270790177
 GameObject:
   m_ObjectHideFlags: 0

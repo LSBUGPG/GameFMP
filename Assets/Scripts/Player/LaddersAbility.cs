@@ -7,13 +7,7 @@ public class LaddersAbility : BaseAbility
 {
     public InputActionReference ladderActionRef;
     [SerializeField] private float climbSpeed;
-    [SerializeField] private float setMinLadderTime;
-    private float minimumLadderTime;
-    private bool climb;
-    private bool tryingToClimb;
-    private bool canGoOnLadder;
-
-
+    private bool touchingLadder;
     private string ladderParameterName = "Ladder";
     private int ladderParameterID;
 
@@ -21,13 +15,11 @@ public class LaddersAbility : BaseAbility
     {
         base.Initialization();
         ladderParameterID = Animator.StringToHash(ladderParameterName);
-        minimumLadderTime = setMinLadderTime;
     }
 
     public void TouchingLadder(bool touching)
     {
-        canGoOnLadder = touching;
-        linkedPhysics.touchingLadder = touching;
+        touchingLadder = touching;
     }
 
     private void OnEnable()
@@ -44,32 +36,23 @@ public class LaddersAbility : BaseAbility
 
     private void TryToClimb(InputAction.CallbackContext value)
     {
-        tryingToClimb = true;
-        TryToClimb();
-    }
-
-    private void TryToClimb()
-    {
-        if (!isPermitted)   
+        if (!isPermitted)
         {
             return;
         }
-        linkedAnimator.enabled = true;
-        if (linkedStateMachine.currentState==PlayerStates.State.Ladders || linkedStateMachine.currentState == PlayerStates.State.Dash || !canGoOnLadder)
+        if (linkedStateMachine.currentState == PlayerStates.State.Ladders)
         {
+            linkedAnimator.enabled = true;
             return;
         }
-
-        linkedStateMachine.ChangeState(PlayerStates.State.Ladders);
-        linkedPhysics.DisableGravity();
-        linkedPhysics.ResetVelocity();
-        climb = true;
-        minimumLadderTime = setMinLadderTime;
-        
+        if (touchingLadder)
+        {
+            linkedStateMachine.ChangeState(PlayerStates.State.Ladders);
+        }
     }
+
     private void StopClimb(InputAction.CallbackContext value)
     {
-        tryingToClimb = false;
         if (!isPermitted)
         {
             return;
@@ -78,67 +61,46 @@ public class LaddersAbility : BaseAbility
         {
             return;
         }
-        linkedPhysics.ResetVelocity();
         linkedAnimator.enabled = false;
     }
 
     public override void EnterAbility()
     {
+        linkedAnimator.enabled = true;
+        linkedPhysics.SetOnLadder(true);
     }
 
     public override void ExitAbility()
     {
-        linkedPhysics.EnableGravity();
-        climb = false;
+        Debug.Log("Exit ladder");
+        linkedPhysics.SetOnLadder(false);
         linkedAnimator.enabled = true;
+        UpdateAnimator();
     }
 
-    private void Update()
-    {
-        if (tryingToClimb /* || linkedStateMachine.currentState == PlayerStates.State.Jump*/)
-        {
-            TryToClimb();
-        }
-    }
     public override void ProcessAbility()
     {
-        if (climb)
-        {
-            minimumLadderTime -= Time.deltaTime;
-        }
         if (linkedInput.horizontalInput != 0)
         {
             linkedStateMachine.ChangeState(PlayerStates.State.Jump);
-            linkedPhysics.EnableGravity();
-            return;
-        }
-        if (canGoOnLadder == false)
-        {
-            climb = false;
-            if (linkedPhysics.grounded == false)
-            {
-                linkedStateMachine.ChangeState(PlayerStates.State.Jump);
-                //linkedPhysics.EnableGravity();
-            }
-        }
-        if(linkedPhysics.grounded && minimumLadderTime <= 0)
-        {
-            linkedStateMachine.ChangeState(PlayerStates.State.Idle);
-            //linkedPhysics.EnableGravity();
         }
     }
 
-   public override void ProcessFixedAbility()
+    public override void ProcessFixedAbility()
     {
-        if (climb)
+        if (touchingLadder || linkedInput.verticalInput < 0)
         {
             linkedPhysics.rb.linearVelocity = new Vector2(0, linkedInput.verticalInput * climbSpeed);
+        }
+        else
+        {
+            linkedPhysics.rb.linearVelocity = Vector2.zero;
         }
     }
 
 
     public override void UpdateAnimator()
     {
-        linkedAnimator.SetBool(ladderParameterID,linkedStateMachine.currentState == PlayerStates.State.Ladders);
+        linkedAnimator.SetBool(ladderParameterID, linkedStateMachine.currentState == PlayerStates.State.Ladders);
     }
 }

@@ -7,7 +7,7 @@ public class IdleAbility : BaseAbility
 
     public override void EnterAbility()
     {
-        linkedPhysics.rb.linearVelocityX = 0;
+        linkedPhysics.ResetVelocity();
     }
     protected override void Initialization()
     {

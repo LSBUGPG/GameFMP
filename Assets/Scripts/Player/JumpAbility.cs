@@ -56,6 +56,13 @@ public class JumpAbility : BaseAbility
             linkedPhysics.rb.linearVelocity = new Vector2(airSpeed * linkedInput.horizontalInput, linkedPhysics.rb.linearVelocityY);
         }
     }
+
+    private void Jump()
+    {
+        linkedPhysics.rb.linearVelocity = new Vector2(airSpeed * linkedInput.horizontalInput, jumpForce);
+        mininumAirTime = startmininumAirTime;
+    }
+
     private void TryToJump(InputAction.CallbackContext value)
     {
         if (isPermitted == false)
@@ -63,26 +70,10 @@ public class JumpAbility : BaseAbility
             return;
         }
 
-        if (linkedStateMachine.currentState == PlayerStates.State.Ladders)
+        if (linkedStateMachine.currentState == PlayerStates.State.Ladders || linkedPhysics.grounded)
         {
             linkedStateMachine.ChangeState(PlayerStates.State.Jump);
-            
-            
-            
-            
-            
-            
-            // linkedPhysics.EnableGravity();
-            linkedPhysics.rb.linearVelocity = new Vector2(airSpeed * linkedInput.horizontalInput, jumpForce );
-            mininumAirTime = startmininumAirTime;
-            return;
-        }
-            
-        if (linkedPhysics.grounded)
-        {
-            linkedStateMachine.ChangeState(PlayerStates.State.Jump);
-            linkedPhysics.rb.linearVelocity = new Vector2(airSpeed * linkedInput.horizontalInput, jumpForce);
-            mininumAirTime = startmininumAirTime;
+            Jump();
         }
     }
 
